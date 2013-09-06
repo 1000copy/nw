@@ -3,7 +3,11 @@
   <head>
     <title>Dictionary</title>
     <meta charset="utf-8">
-
+    <style type="text/css">
+        body{padding-top: 0px;margin-top: 0px}
+        H1 {background:maroon;color:white;padding-top: 0px;margin-top: 0px} 
+        input{height: 35px;font-size: 25px;}
+    </style>
     <script type="text/javascript">
       function runScript(event){
         characterCode = event.keyCode;
@@ -42,8 +46,16 @@
           json = eval("("+json+")");
           document.getElementById("result").innerHTML  = json.basic.explains[0];    
         }catch(err){
-          document.getElementById("result").innerHTML  = err;
-          // document.getElementById("result").innerHTML  = "要联网哦";
+          // e instanceof
+          if (err.name == "SyntaxError")
+            msg = "输入单词";
+          else if (err.name == "NetworkError")
+            msg = "要联网哦";
+          else if (err.name == "TypeError")        //TypeError: Cannot read property 'explains' of undefined
+            msg = "好刁钻的词";
+          else 
+            msg = err;
+          document.getElementById("result").innerHTML  = msg;          
         }
       }
     </script>
@@ -51,12 +63,21 @@
   <body>
     <h1>Dictionary!</h1>
     <input type="text" value="" placeholder="word..." id ="word" onkeypress="return runScript(event)" />    
-    <input type="button" value="query" onclick="q();"/>    
-    <input type="button" value="close" onclick="quit();" />    
+<!--     <input type="button" value="query" onclick="q();"/>    
+    <input type="button" value="close" onclick="quit();" />  -->   
     <p id="result"></p>
     <script>
       document.write(process.version)
       document.getElementById('word').focus();
-    </script>.
+      document.onkeydown = function(evt) {
+          evt = evt || window.event;
+          if (evt.keyCode == 27) {
+              // quit(); 退出了再启动就太慢了
+              var gui = require('nw.gui');
+              var win = gui.Window.get();
+              win.minimize();
+          }
+      };
+    </script>
   </body>
 </html>
