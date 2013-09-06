@@ -2,7 +2,21 @@
 <html>
   <head>
     <title>Dictionary</title>
+    <meta charset="utf-8">
+
     <script type="text/javascript">
+      function runScript(event){
+        characterCode = event.keyCode;
+        if(characterCode == 13)
+        {
+            q();
+            return false; // returning false will prevent the event from bubbling up.
+        }
+        else
+        {
+            return true;
+        }
+      }
       function quit(){
         var gui = require('nw.gui');
         // Quit current app
@@ -18,21 +32,28 @@
         return xmlHttp.responseText;
       }
       function q(){
-        r = document.getElementById("word").value;
-        url = "http://fanyi.youdao.com/openapi.do?keyfrom=badrobot&key=2138134139&type=data&doctype=json&version=1.1&callback=show&q=";  
-        url += r ;        
-        json = httpGet(url);
-        json = eval("("+json+")");
-        document.getElementById("result").innerHTML  = json.basic.explains[0];    
+        word_input = document.getElementById("word");
+        r = word_input.value;
+        word_input.select();
+        try{
+          url = "http://fanyi.youdao.com/openapi.do?keyfrom=badrobot&key=2138134139&type=data&doctype=json&version=1.1&callback=show&q=";  
+          url += r ;        
+          json = httpGet(url);
+          json = eval("("+json+")");
+          document.getElementById("result").innerHTML  = json.basic.explains[0];    
+        }catch(err){
+          document.getElementById("result").innerHTML  = err;
+          // document.getElementById("result").innerHTML  = "要联网哦";
+        }
       }
     </script>
   </head>
   <body>
     <h1>Dictionary!</h1>
-    <input type="text" value="" placeholder="word..." id ="word" />    
+    <input type="text" value="" placeholder="word..." id ="word" onkeypress="return runScript(event)" />    
     <input type="button" value="query" onclick="q();"/>    
     <input type="button" value="close" onclick="quit();" />    
-    <p id="result">word meanings</p>
+    <p id="result"></p>
     <script>
       document.write(process.version)
       document.getElementById('word').focus();
