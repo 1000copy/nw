@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Dictionary</title>
+    <meta charset="utf-8">
+    <style type="text/css">
+        body{padding-top: 0px;margin-top: 0px}
+        H1 {background:maroon;color:white;padding-top: 0px;margin-top: 0px} 
+        input{height: 35px;font-size: 25px;}
+    </style>
+    <script type="text/tiscript">
+     
+    var sandbox = $(#result)
+    function show(data,status = 200)
+    {
+        try {
+            var indicator = $(#result)
+            indicator.value = String.$(Status: {status}, data: {typeof(data)});
+            sandbox.html = data.basic.explains[0]
+        } catch (e) {
+            sandbox.value = e.toString();
+        }
+    }
+
+    $(#get).onClick = function() {
+
+        var w = $(#word).text
+        var params = { q:w }; // passing custom parameters
+        var headers = { "user-token": "for the demo purposes!" }; // passing custom headers
+        var url = "http://fanyi.youdao.com/openapi.do?keyfrom=badrobot&key=2138134139&type=data&doctype=json&version=1.1&callback=show"
+        //var url ="http://localhost:8080"
+        var re = sandbox.request(show, #get, url, params,headers);
+    }
+    </script>
+  </head>
+  <body>
+    <h1>Dictionary!</h1>
+    <input type="text" value="" placeholder="word..." id ="word" />
+    <input type="button" value="get" id="get"/>
+    <p id="result"></p>
+    <menu.popup>
+      <li id="file-open">Open File <span.accesskey>Ctrl+O</span></li>
+      <hr>
+      <li>Recent Files
+        <menu id="LRU">
+          <li>My file.htm</li>
+          <li>His file.htm</li>
+          <li>Her file.htm</li>
+        </menu>
+      </li>
+    </menu>
+  </body>
+</html>
